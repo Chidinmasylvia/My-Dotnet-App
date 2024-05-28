@@ -1,0 +1,28 @@
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: example
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - "8080:8085"
+
+  app:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - "5002:8080"
+    depends_on:
+      - db
+    volumes:
+      - postgres-data:/path/in/container
+
+volumes:
+  postgres-data:
